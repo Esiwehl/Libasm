@@ -6,7 +6,7 @@ ft_write:
     mov eax, 1
     syscall
 
-    cmp rax,0
+    cmp rax, 0
     jl .error
     ret
 
