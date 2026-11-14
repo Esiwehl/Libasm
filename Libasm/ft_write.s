@@ -6,12 +6,12 @@ ft_write:
     mov eax, 1
     syscall
 
-    cmp rax,-4095
+    cmp rax,0
     jae .error
     ret
 
 .error:
-    neg  eax 
+    neg  rax 
     push rax
 
     call __errno_location wrt ..plt
@@ -19,5 +19,5 @@ ft_write:
     pop rdx
 
     mov [rax], rdx 
-    mov rax,-1
+    mov rax, -1
     ret

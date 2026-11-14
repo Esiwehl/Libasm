@@ -12,6 +12,7 @@
 
 size_t ft_strlen(char *str);
 ssize_t ft_write(int fd, const void *buf, size_t count);
+ssize_t ft_read(int fd, void *buf, size_t count);
 
 char *str = "This is what we're writing ;)\n";
 void strlen_test(){
@@ -22,14 +23,33 @@ void strlen_test(){
 }
 
 void write_test(){
-    int test = ft_write(STDIN, str, 12); 
+    int test = ft_write(STDOUT, str, ft_strlen(str)); 
     if (test < 0)
     {
-        // strerror(errno);
         printf("Errno %d: %s\n", errno, strerror(errno));
         return;
     }
-    // write(STDIN, str, strlen(str));
+}
+
+void read_test(){
+    int buffsize = 256;
+    char buff[buffsize];
+    char a;
+    int i = 0;
+    int test = 0;
+
+    while ((test = ft_read(44, &a, 1)) > 0 && i < 256)
+    {
+        buff[i] = a;
+        i++;
+    }
+    if (test < 0)
+    {
+        printf("Errno %d: %s\n", errno, strerror(errno));
+        return;
+    }
+    else
+        printf("\nThis is what we read = \"%s\"", buff);
 }
 
 int main( void )
@@ -37,8 +57,11 @@ int main( void )
     printf("\t\tSTRLEN TEST :D\n");
     printf(SEPERATOR);
     strlen_test();
-    printf("\t\t WRITE TEST :D\n");
+    printf("\n\t\t WRITE TEST :D\n");
     printf(SEPERATOR);
     write_test();
+    printf("\n\t\t READ TEST :D\n");
+    printf(SEPERATOR);
+    read_test();
     return (0);
 }
