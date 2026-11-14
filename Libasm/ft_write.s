@@ -7,7 +7,7 @@ ft_write:
     syscall
 
     cmp rax,0
-    jae .error
+    jl .error
     ret
 
 .error:
