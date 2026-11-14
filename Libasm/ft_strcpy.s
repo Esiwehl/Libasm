@@ -6,8 +6,8 @@ ft_strcpy:
 	xor rcx, rcx
 
 .loop:
-	mov dl, [rdi + rcx]
-	mov [rsi + rcx], dl
+	mov dl, [rsi + rcx]
+	mov [rdi + rcx], dl
 
 	cmp dl, 0
 	je 	.done
