@@ -14,6 +14,8 @@ size_t ft_strlen(char *str);
 ssize_t ft_write(int fd, const void *buf, size_t count);
 ssize_t ft_read(int fd, void *buf, size_t count);
 
+char *ft_strcpy(char *dest, const char *src);
+
 char *str = "This is what we're writing ;)\n";
 void strlen_test(){
     // char* str = "Hello World! :D";
@@ -23,7 +25,7 @@ void strlen_test(){
 }
 
 void write_test(){
-    int test = ft_write(STDOUT, str, ft_strlen(str)); 
+    int test = ft_write(1, str, ft_strlen(str)); 
     if (test < 0)
     {
         printf("Errno %d: %s\n", errno, strerror(errno));
@@ -52,6 +54,17 @@ void read_test(){
         printf("\nThis is what we read = \"%s\"", buff);
 }
 
+void strcpy_test(){
+    char test[20] = "we are copying this";
+    char copy[20] = "the copied string...";
+
+    printf("Before: %s | %s \n", test, copy);
+    // ft_strcpy(copy,test);
+    strcpy(copy,test);
+    printf("_After: %s | %s \n", test, copy);
+    // printf("Copied bytes: %s\n", copied_bytes);
+}
+
 int main( void )
 {
     printf("\t\tSTRLEN TEST :D\n");
@@ -63,5 +76,9 @@ int main( void )
     printf("\n\t\t READ TEST :D\n");
     printf(SEPERATOR);
     read_test();
+
+    printf("\n\t\t STRCPY TEST :D\n");
+    printf(SEPERATOR);
+    strcpy_test();
     return (0);
 }
