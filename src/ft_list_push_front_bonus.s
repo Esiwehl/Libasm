@@ -21,7 +21,7 @@ ft_list_push_front:
     mov [rax], r13
     mov rdx, [r12]
     mov [rax + 8], rdx
-    mov [rbx], r12
+    mov [r12], rax
 
 .done:
     add rsp, 8
