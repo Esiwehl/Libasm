@@ -1,28 +1,46 @@
-NAME	= libasm_test
-CC		= cc
-CFLAGS	= -Wall -Werror -Wextra
 
-SRC		= main.c
-OBJ		= $(SRCS:.c=.o)
+NAME = libasm.a
+TEST = libasm_test
 
-LIB_PATH = Libasm
-LIB_NAME = libasm.a
+SRCS = src/ft_strlen.s src/ft_write.s src/ft_read.s \
+       src/ft_strcpy.s src/ft_strcmp.s src/ft_strdup.s
 
-all			: $(NAME)
+BONUS = src/ft_list_push_front_bonus.s \
+        src/ft_list_size_bonus.s
 
-$(NAME)		: $(LIB_NAME) $(SRC)
-	@$(CC) $(CFLAGS) $(SRC) $(LIB_PATH)/$(LIB_NAME) -o $(NAME)
+OBJS = $(SRCS:.s=.o)
+BONUS_OBJS = $(BONUS:.s=.o)
 
-$(LIB_NAME)	:
-	@make -C $(LIB_PATH)
+NASM = nasm -f elf64
+AR = ar rcs
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
 
-clean		:
-	@make -C $(LIB_PATH) clean
-	@rm -Rf $(NAME)
+all: $(NAME)
 
-fclean		: clean
-	@make -C $(LIB_PATH) fclean
+%.o: %.s
+	$(NASM) $< -o $@
 
-re			: fclean all
+$(NAME): $(OBJS)
+	$(AR) $(NAME) $(OBJS)
 
-.PHONY		: all clean fclean re
+bonus: .bonus.stamp
+
+.bonus.stamp: $(NAME) $(BONUS_OBJS)
+	$(AR) $(NAME) $(BONUS_OBJS)
+	touch $@
+
+test: $(TEST)
+
+$(TEST): main.c $(NAME)
+	$(CC) $(CFLAGS) main.c $(NAME) -o $(TEST)
+
+clean:
+	rm -f $(OBJS) $(BONUS_OBJS) .bonus.stamp
+
+fclean: clean
+	rm -f $(NAME) $(TEST)
+
+re: fclean all
+
+.PHONY: all bonus test clean fclean re
