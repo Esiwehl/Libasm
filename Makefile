@@ -2,6 +2,8 @@
 NAME = libasm.a
 TEST = libasm_test
 
+HEADERS = libasm.h
+
 SRCS = src/ft_strlen.s src/ft_write.s src/ft_read.s \
        src/ft_strcpy.s src/ft_strcmp.s src/ft_strdup.s
 
@@ -21,7 +23,7 @@ all: $(NAME)
 %.o: %.s
 	$(NASM) $< -o $@
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(HEADERS)
 	$(AR) $(NAME) $(OBJS)
 
 bonus: .bonus.stamp
@@ -32,7 +34,7 @@ bonus: .bonus.stamp
 
 test: $(TEST)
 
-$(TEST): main.c $(NAME)
+$(TEST): main.c $(NAME) bonus
 	$(CC) $(CFLAGS) main.c $(NAME) -o $(TEST)
 
 clean:
