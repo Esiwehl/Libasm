@@ -17,10 +17,9 @@ int findNum(char c, char *base)
 int validBase(char *base)
 {
     int idx;
-    int j;
+    int jdx;
 
-    if (!base)
-        return 0;
+    if (!base) return 0;
 
     for (idx = 0; base[idx]; idx++)
     {
@@ -28,15 +27,14 @@ int validBase(char *base)
             || base[idx] == ' ' || (base[idx] >= 9 && base[idx] <= 13))
             return 0;
 
-        for (j = idx + 1; base[j]; j++)
+        for (jdx = idx + 1; base[jdx]; jdx++)
         {
-            if (base[idx] == base[j])
+            if (base[idx] == base[jdx])
                 return 0;
         }
     }
 
-    if (idx < 2)
-        return 0;
+    if (idx < 2) return 0;
 
     return 1;
 }
