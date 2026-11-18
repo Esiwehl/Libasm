@@ -1,23 +1,10 @@
 #include <stdio.h>
-#include <sys/types.h>
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
 #include <stdlib.h>
 
-#define STDIN   0
-#define STDOUT  1
-#define STDERR  2
-
-#define SEPERATOR "------------------------------------------------\n"
-
-size_t ft_strlen(char *str);
-ssize_t ft_write(int fd, const void *buf, size_t count);
-ssize_t ft_read(int fd, void *buf, size_t count);
-int ft_strcmp(const char *s1, const char *s2);
-char *ft_strdup(const char *s);
-
-char *ft_strcpy(char *dest, const char *src);
+#include "libasm.h"
 
 void strlen_test(){
     char* str = "Hello World! :D";
@@ -43,11 +30,16 @@ void read_test(){
     int i = 0;
     int test = 0;
 
-    while ((test = ft_read(44, &a, 1)) > 0 && i < 256)
+    printf("Enter something: ");
+    fflush(stdout);
+    
+    while ((i < buffsize - 1) && (test = ft_read(44, &a, 1)) > 0)
     {
+        if (a == '\n') break;
         buff[i] = a;
         i++;
     }
+    buff[i] = '\0';
     if (test < 0)
     {
         printf("Errno %d: %s\n", errno, strerror(errno));
@@ -62,10 +54,11 @@ void strcpy_test(){
     char copy[21] = "the copied string...";
 
     printf("Before: %s | %s \n", test, copy);
-    ft_strcpy(copy,test);
+    char *retval = ft_strcpy(copy,test);
     // strcpy(copy,test);
     printf("_After: %s | %s \n", test, copy);
-    // printf("Copied bytes: %s\n", copied_bytes);
+    printf("Returned original destination: %s\n",
+    retval == copy ? "YES" : "NO");
 }
 
 void strcmp_test(){
@@ -90,26 +83,55 @@ void strdup_test(){
         printf("I was dupped correctly\n");
         printf("str = %s\n", dupped);
     }
+
+    printf("Original address: %p\n", (void *)og);
+    printf("Copied address:   %p\n", (void *)dupped);
+
     free(dupped);
+}
+
+void list_test(){
+    t_list *head = NULL;
+    t_list *current;
+
+    ft_list_push_front(&head, "first");
+    ft_list_push_front(&head, "second");
+    ft_list_push_front(&head, "third");
+
+    printf("List size: %d\n", ft_list_size(head));
+
+    current = head;
+    while (current)
+    {
+        printf("Node: %s\n", (char *)current->data);
+        current = current->next;
+    }
+
+    while (head)
+    {
+        current = head;
+        head = head->next;
+        free(current);
+    }
 }
 
 int main( void )
 {
     printf("\t\tSTRLEN TEST :D\n");
     printf(SEPERATOR);
-    // strlen_test();
+    strlen_test();
     
     printf("\n\t\t WRITE TEST :D\n");
     printf(SEPERATOR);
-    // write_test();
+    write_test();
 
     printf("\n\t\t READ TEST :D\n");
     printf(SEPERATOR);
-    // read_test();
+    read_test();
 
     printf("\n\t\t STRCPY TEST :D\n");
     printf(SEPERATOR);
-    // strcpy_test();
+    strcpy_test();
 
     printf("\n\t\t STRCMP TEST :D\n");
     printf(SEPERATOR);
@@ -118,5 +140,9 @@ int main( void )
     printf("\n\t\t STRDUP TEST :D\n");
     printf(SEPERATOR);
     strdup_test();
+
+    printf("\n\t\t LIST TEST :D\n");
+    printf(SEPERATOR);
+    list_test();
     return (0);
 }
